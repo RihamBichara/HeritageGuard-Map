@@ -1,0 +1,209 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+    background: #000428; 
+    color: white;
+  }
+  
+  .intro {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background: url('/images/landing.jpeg') no-repeat center center/cover;
+    overflow: hidden;
+    animation: fadeInBackground 2s ease-in-out;
+  }
+  
+
+ header {
+  position: absolute;
+  top: 15px; 
+  left: 20px; 
+  z-index: 1000; 
+}
+
+.icon-container {
+  display: flex;
+  justify-content: center;
+}
+
+.icon {
+  width: 150px; 
+  height: auto;
+}
+  
+  .icon:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0px 0px 10px rgba(255, 255, 255, 0.7));
+  }
+  
+  .intro-content {
+    position: relative;
+    text-align: center;
+    z-index: 10;
+    animation: fadeInContent 2s ease-in-out;
+  }
+  
+ .animated-title {
+  font-size: 4em;
+  margin-bottom: 0.5em;
+  animation: fadeInText 2s ease-in-out;
+ 
+
+  color: #ffffff; 
+  text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #ffffff; /* Intense fiery glow */
+  transform: scale(1.05); 
+}
+
+.animated-title:hover {
+    transition: color 0.3s, text-shadow 0.3s, transform 0.3s;
+    color: #ffffff;
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #FFA500, 0 0 15px #FF8C00, 0 0 20px #FF4500, 0 0 25px #ffffff;
+}
+
+@keyframes fadeInText {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+  
+  .animated-subtitle {
+    font-size: 1.5em;
+    margin-bottom: 2em;
+    animation: fadeInText 3s ease-in-out;
+    transition: color 0.3s, text-shadow 0.3s, transform 0.3s;
+  }
+  
+  .animated-subtitle:hover {
+    color: #FFA500; 
+    text-shadow: 0 0 px #ffffff, 0 0 20px #FFA500, 0 0 17px #FF4500;
+    transform: scale(1.05); 
+  }
+  
+  .start-button {
+    padding: 1em;
+    border: 2px solid white;
+    border-radius: 50%;
+    background: transparent;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s, transform 0.3s;
+    animation: buttonPopIn 2s ease-out;
+    position: absolute;
+    bottom: -300px;
+    right: -330px;
+    text-decoration: none; 
+  }
+  
+  .start-button svg {
+    stroke: white;
+    transition: transform 0.3s;
+  }
+  
+  .start-button:hover {
+    background: rgba(255, 255, 255, 0.1); 
+    transform: scale(1.1); 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); 
+  }
+  
+  @keyframes fadeInBackground {
+    from {
+      opacity: 0;
+      transform: scale(1.1);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes fadeInLogo {
+    from {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes fadeInContent {
+    from {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeInText {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes buttonPopIn {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.2; 
+  }
+  
+  .particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: url('/images/particles.png') repeat;
+    opacity: 0.2; 
+    background-size: 20px 20px; 
+    filter: blur(2px); 
+  }
+  
+  

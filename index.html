@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>حارسة التراث</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="intro">
+      <header>
+        <div class="icon-container">
+          <img src="/images/logo.png" alt="Icon" class="icon" />
+        </div>
+      </header>
+      <div class="intro-content">
+        <h1 class="animated-title">حارسة التراث</h1>
+        <p class="animated-subtitle">
+          خارطتك للتنقل عبر الزمن والعودة لتراث غرب المملكة العربية السعودية
+          وساحل البحر الأحمر
+        </p>
+        <a href="/map.html" class="start-button">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-arrow-right"
+          >
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+      <canvas id="sandstormCanvas"></canvas>
+      <div class="particles"></div>
+    </div>
+    <script src="scripts.js"></script>
+  </body>
+</html>
