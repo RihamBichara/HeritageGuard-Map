@@ -4,10 +4,9 @@ body, html {
   height: 100%;
   overflow: hidden;
   font-family: 'Reem Kufi', 'Times New Roman', Times, serif;
-  background: #000000; 
+  background: #000000;
   color: white;
 }
-
 
 .intro {
   position: relative;
@@ -24,7 +23,7 @@ body, html {
 
 header {
   position: absolute;
-  top: 15px; 
+  top: 15px;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -33,20 +32,15 @@ header {
   z-index: 1000;
 }
 
-.left-logo {
-  margin-right: auto;
-}
-
 .logo-container {
   display: flex;
   align-items: center;
   width: 100%;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
 
-.icon {
-  width: 150px; 
-  height: auto;
-  margin-left: 10px; 
+.left-logo {
+  margin-right: auto;
 }
 
 .logo-right {
@@ -54,10 +48,17 @@ header {
   gap: 5px;
   direction: rtl;
   margin-left: auto;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.icon {
+  width: 100px;
+  height: auto;
+  margin-left: 10px;
 }
 
 .logo-right .icon {
-  width: 150px;
+  width: 100px;
   height: auto;
   margin-right: 0;
 }
@@ -78,9 +79,9 @@ header {
   font-size: 4em;
   margin-bottom: 0.5em;
   animation: fadeInText 2s ease-in-out;
-  color: #ffffff; 
+  color: #ffffff;
   text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #ffffff;
-  transform: scale(1.05); 
+  transform: scale(1.05);
 }
 
 .animated-title:hover {
@@ -89,28 +90,17 @@ header {
   text-shadow: 0 0 5px #ffffff, 0 0 10px #FFA500, 0 0 15px #FF8C00, 0 0 20px #FF4500, 0 0 25px #ffffff;
 }
 
-@keyframes fadeInText {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .animated-subtitle {
   font-size: 1.5em;
-  margin-bottom: 2em;
+  margin-bottom: 1em; /* Space between subtitle and button */
   animation: fadeInText 3s ease-in-out;
   transition: color 0.3s, text-shadow 0.3s, transform 0.3s;
 }
 
 .animated-subtitle:hover {
-  color: #FFA500; 
+  color: #FFA500;
   text-shadow: 0 0 px #ffffff, 0 0 20px #FFA500, 0 0 17px #FF4500;
-  transform: scale(1.05); 
+  transform: scale(1.05);
 }
 
 .start-button {
@@ -126,10 +116,7 @@ header {
   justify-content: center;
   transition: background 0.3s, transform 0.3s;
   animation: buttonPopIn 2s ease-out;
-  position: absolute;
-  bottom: -300px;
-  right: -330px;
-  text-decoration: none; 
+  text-decoration: none;
 }
 
 .start-button svg {
@@ -138,9 +125,9 @@ header {
 }
 
 .start-button:hover {
-  background: rgba(255, 255, 255, 0.1); 
-  transform: scale(1.1); 
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); 
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 @keyframes fadeInBackground {
@@ -151,17 +138,6 @@ header {
   to {
     opacity: 1;
     transform: scale(1);
-  }
-}
-
-@keyframes fadeInLogo {
-  from {
-    opacity: 0;
-    transform: translateX(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
   }
 }
 
@@ -210,7 +186,7 @@ canvas {
   height: 100%;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.2; 
+  opacity: 0.2;
 }
 
 .particles {
@@ -221,7 +197,55 @@ canvas {
   height: 100%;
   pointer-events: none;
   background: url('/images/particles.png') repeat;
-  opacity: 0.2; 
-  background-size: 20px 20px; 
-  filter: blur(2px); 
+  opacity: 0.2;
+  background-size: 20px 20px;
+  filter: blur(2px);
 }
+
+/* Media Queries for smaller devices */
+@media (max-width: 768px) {
+  .icon {
+    width: 100px; /* Adjust logo sizes */
+  }
+
+  .logo-right .icon {
+    width: 100px; /* Adjust secondary logo sizes */
+  }
+
+  .animated-title {
+    font-size: 2em; /* Adjust title size */
+  }
+
+  .animated-subtitle {
+    font-size: 1em; /* Adjust subtitle size */
+  }
+
+  .start-button {
+    padding: 0.5em;
+    font-size: 0.8em;
+  }
+}
+
+@media (max-width: 480px) {
+  .icon {
+    width: 80px; /* Further adjust logo sizes */
+  }
+
+  .logo-right .icon {
+    width: 80px; /* Further adjust secondary logo sizes */
+  }
+
+  .animated-title {
+    font-size: 1.5em; /* Further adjust title size */
+  }
+
+  .animated-subtitle {
+    font-size: 0.9em; /* Further adjust subtitle size */
+  }
+
+  .start-button {
+    padding: 0.4em;
+    font-size: 0.7em;
+  }
+}
+
