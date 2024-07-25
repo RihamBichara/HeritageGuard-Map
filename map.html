@@ -9,402 +9,498 @@
       href="https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css"
       rel="stylesheet"
     />
+
     <style>
-      body {
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        overflow: hidden;
-        background: url("/images/bg.jpeg") no-repeat center center fixed;
-        background-size: cover;
-        font-family: Arial, sans-serif;
-      }
+    body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  background: url("/images/bg.jpeg") no-repeat center center fixed;
+  background-size: cover;
+  font-family: Arial, sans-serif;
+}
 
-      #container {
-        display: flex;
-        width: 85vw;
-        height: 80vh;
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
-        overflow: hidden;
-        position: relative;
-        background: rgba(255, 255, 255, 0.8);
-        margin-top: 70px;
-      }
+header {
+  position: absolute;
+  top: 15px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 1000;
+}
 
-      #map {
-        flex: 1;
-        position: relative;
-        background: #ffffff;
-        transition: transform 1s ease, filter 1s ease;
-      }
+.logo-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
 
-      #map.zoomed {
-        transform: scale(1.1);
-        filter: brightness(0.85);
-      }
+.left-logo {
+  margin-right: auto;
+}
 
-      #info-panel {
-        width: 500px;
-        background: rgba(255, 255, 255, 0.6);
-        backdrop-filter: blur(15px);
-        padding: 20px;
-        box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
-        overflow-y: auto;
-        position: absolute;
-        top: 0;
-        right: 0;
-        height: 100%;
-        transform: translateX(100%);
-        transition: transform 0.5s ease-in-out;
-        color: #333;
-        max-height: 100vh;
-      }
+.logo-right {
+  display: flex;
+  gap: 5px;
+  direction: rtl;
+  margin-left: auto;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
 
-      @media (max-width: 1024px) {
-        #info-panel {
-          width: 70%;
-        }
-      }
+.icon {
+  width: 100px;
+  height: auto;
+  margin-left: 10px;
+}
 
-      @media (max-width: 768px) {
-        #info-panel {
-          width: 80%;
-        }
-      }
+.logo-right .icon {
+  width: 100px;
+  height: auto;
+  margin-right: 0;
+}
 
-      @media (max-width: 480px) {
-        #info-panel {
-          width: 90%;
-        }
-      }
+.icon:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0px 0px 10px rgba(255, 255, 255, 0.7));
+}
+#container {
+  display: flex;
+  width: 85vw;
+  height: 80vh;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  position: relative;
+  background: rgba(255, 255, 255, 0.8);
+  margin-top: 70px;
+}
 
-      #info-panel.visible {
-        transform: translateX(0);
-      }
+#map {
+  flex: 1;
+  position: relative;
+  background: #ffffff;
+  transition: transform 1s ease, filter 1s ease;
+}
 
-      #info-panel button {
-        background: #3a5a76;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 10px;
-        cursor: pointer;
-        font-size: 16px;
-        margin-top: 20px;
-        text-align: left;
-      }
+#map.zoomed {
+  transform: scale(1.1);
+  filter: brightness(0.85);
+}
 
-      .info-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-bottom: 2px solid #3a5a76;
-        padding-bottom: 10px;
-        margin-bottom: 15px;
-        text-align: right;
-        position: relative;
-      }
+#info-panel {
+  width: 500px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(15px);
+  padding: 10px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  transform: translateX(100%);
+  transition: transform 0.5s ease-in-out;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+}
 
-      .info-header button {
-        order: 1;
-      }
+.info-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 40px;
+}
 
-      .info-header h2 {
-        order: 2;
-        margin: 0;
-        font-size: 26px;
-        font-weight: bold;
-        text-align: right;
-      }
+.citations {
+  font-size: 12px;
+  color: #555;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+}
 
-      .info-content {
-        margin-top: 10px;
-        text-align: right;
-        color: #000000;
-      }
+.citations a {
+  color: #007bff;
+  text-decoration: none;
+}
 
-      .info-content img {
-        max-width: 100%;
-        height: auto;
-        margin-top: 10px;
-        border-radius: 10px;
-        box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
-      }
+.citations a:hover {
+  text-decoration: underline;
+}
 
-      .info-content {
-        margin-top: 10px;
-        text-align: right;
-      }
+#info-panel-citation {
+  position: absolute;
+  bottom: 10px;
+  width: calc(100% - 20px);
+  font-size: 12px;
+  color: #555;
+  text-align: center;
+}
 
-      .info-content audio,
-      .info-content video {
-        width: 100%;
-        margin-top: 10px;
-      }
+#info-panel-citation h3 {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
 
-      @media (max-width: 768px) {
-        #info-panel {
-          width: 80%;
-        }
-      }
+@media (max-width: 1024px) {
+  #info-panel {
+    width: 70%;
+  }
+}
 
-      @media (max-width: 480px) {
-        #info-panel {
-          width: 100%;
-        }
-      }
+@media (max-width: 768px) {
+  #info-panel {
+    width: 80%;
+  }
+}
 
-      .custom-marker {
-        position: relative;
-        width: 40px;
-        height: 40px;
-        background-color: transparent;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-      }
+@media (max-width: 480px) {
+  #info-panel {
+    width: 90%;
+  }
+}
 
-      .marker-label {
-        position: absolute;
-        top: -25px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.7);
-        color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
-        font-size: 12px;
-        white-space: nowrap;
-      }
+#info-panel.visible {
+  transform: translateX(0);
+}
 
-      .custom-marker img {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-      }
+#info-panel button {
+  background: #3a5a76;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+  text-align: left;
+}
 
-      .start-button {
-        padding: 1em;
-        border: 2px solid white;
-        border-radius: 50%;
-        background: transparent;
-        color: white;
-        font-size: 1em;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background 0.3s, transform 0.3s;
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-        text-decoration: none;
-        z-index: 1000;
-      }
+.info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #3a5a76;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  text-align: right;
+  position: relative;
+}
 
-      .start-button svg {
-        stroke: white;
-        transition: transform 0.3s;
-      }
+.info-header button {
+  order: 1;
+}
 
-      .start-button:hover {
-        background: rgba(255, 255, 255, 0.1);
-        transform: scale(1.1);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-      }
+.info-header h2 {
+  order: 2;
+  margin: 0;
+  font-size: 26px;
+  font-weight: bold;
+  text-align: right;
+}
 
-      header {
-        position: absolute;
-        top: 15px;
-        left: 20px;
-        z-index: 1000;
-      }
+.info-content {
+  margin-top: 10px;
+  text-align: right;
+  color: #000000;
+}
 
-      .icon-container {
-        display: flex;
-        justify-content: center;
-      }
+.info-content img {
+  max-width: 100%;
+  height: auto;
+  margin-top: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+}
 
-      .icon {
-        width: 150px;
-        height: auto;
-      }
+.info-content audio,
+.info-content video {
+  width: 100%;
+  margin-top: 10px;
+}
 
-      .info-subtitle {
-        font-size: 18px;
-        color: #000000;
-        margin-top: 10px;
-        font-weight: bold;
-      }
+.custom-marker {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  background-color: transparent;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
 
-      .info-text {
-        margin-top: 10px;
-        line-height: 1.6;
-        color: #000000;
-      }
+.marker-label {
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+}
 
-      .media-container {
-        margin-top: 20px;
-      }
+.custom-marker img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
 
-      .media-title {
-        font-size: 16px;
-        color: #555;
-        margin-top: 10px;
-        text-align: right;
-      }
+.start-button {
+  padding: 1em;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: transparent;
+  color: white;
+  font-size: 1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, transform 0.3s;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  text-decoration: none;
+  z-index: 1000;
+}
 
-      @keyframes starry-background {
-        0% {
-          background-position: 0 0;
-        }
-        100% {
-          background-position: 100% 100%;
-        }
-      }
+.start-button svg {
+  stroke: white;
+  transition: transform 0.3s;
+}
 
-      .starry-background {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: url("/images/starry-background.png") repeat;
-        animation: star-movement 20s linear infinite;
-      }
+.start-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
 
-      .starry-background::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(
-          circle,
-          rgba(255, 255, 255, 0.5) 0%,
-          transparent 70%
-        );
-        animation: twinkle 1.5s infinite;
-        pointer-events: none;
-      }
+header {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  z-index: 1000;
+}
 
-      .parallax {
-        position: relative;
-        height: 100vh;
-        overflow: hidden;
-      }
+.icon-container {
+  display: flex;
+  justify-content: center;
+}
 
-      .parallax::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: url("/images/parallax-bg.jpg") no-repeat center center;
-        background-size: cover;
-        transform: translateZ(-1px) scale(2);
-        z-index: -1;
-      }
-      .glassy-panel {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(20px);
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-        position: relative;
-        overflow: hidden;
-      }
+.icon {
+  width: 150px;
+  height: auto;
+}
 
-      @keyframes reflection {
-        0% {
-          transform: translateX(-50%) translateY(-50%);
-        }
-        50% {
-          transform: translateX(50%) translateY(50%);
-        }
-        100% {
-          transform: translateX(-50%) translateY(-50%);
-        }
-      }
+.info-subtitle {
+  font-size: 18px;
+  color: #000000;
+  margin-top: 10px;
+  font-weight: bold;
+}
 
-      .image-grid {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 10px;
-      }
+.info-text {
+  margin-top: 10px;
+  line-height: 1.6;
+  color: #000000;
+}
 
-      .custom-image {
-        width: 100%;
-        max-width: calc(50% - 10px);
-        height: auto;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        transition: transform 0.3s ease;
-      }
+.media-container {
+  margin-top: 20px;
+}
 
-      .custom-image:hover {
-        transform: scale(1.05);
-      }
+.media-title {
+  font-size: 16px;
+  color: #555;
+  margin-top: 10px;
+  text-align: right;
+}
 
-      @media (max-width: 768px) {
-        .custom-image {
-          max-width: calc(100% - 10px);
-        }
-      }
+.media-title1 {
+  font-size: 16px;
+  color: #555;
+  margin-top: 10px;
+  text-align: right;
+}
+
+@keyframes starry-background {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+.starry-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("/images/starry-background.png") repeat;
+  animation: star-movement 20s linear infinite;
+}
+
+.starry-background::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.5) 0%,
+    transparent 70%
+  );
+  animation: twinkle 1.5s infinite;
+  pointer-events: none;
+}
+
+.parallax {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.parallax::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("/images/parallax-bg.jpg") no-repeat center center;
+  background-size: cover;
+  transform: translateZ(-1px) scale(2);
+  z-index: -1;
+}
+
+.glassy-panel {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes reflection {
+  0% {
+    transform: translateX(-50%) translateY(-50%);
+  }
+  50% {
+    transform: translateX(50%) translateY(50%);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-50%);
+  }
+}
+
+.image-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.custom-image {
+  width: 100%;
+  max-width: calc(50% - 10px);
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.custom-image:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .custom-image {
+    max-width: calc(100% - 10px);
+  }
+}
     </style>
   </head>
   <body>
     <header>
-      <div class="icon-container">
-        <img src="/images/logo.png" alt="Icon" class="icon" />
+      <div class="logo-container">
+        <img src="/images/logo.png" alt="Main Logo" class="icon left-logo" />
+        <div class="logo-right">
+          <img src="/images/lo.png" alt="Secondary Logo 1" class="icon" />
+          <img src="/images/lolo.png" alt="Secondary Logo 2" class="icon" />
+        </div>
       </div>
+    </header>
     </header>
     <div id="container">
       <div id="map"></div>
+
+
+
       <div id="info-panel">
         <div class="info-header">
-          <h2 id="city-name"></h2>
-          <button id="back-to-map">العودة الى الخريطة</button>
+            <h2 id="city-name"></h2>
+            <button id="back-to-map">العودة الى الخريطة</button>
         </div>
         <div class="info-content">
-          <div class="media-container">
-            <div class="media-title">صوت</div>
-            <audio id="city-audio" class="custom-audio" controls></audio>
-          </div>
-          <div class="info-subtitle" id="city-subtitle"></div>
-          <p class="info-text" id="city-info"></p>
-
-          <div class="media-container">
-            <div class="media-title">صور</div>
-            <div class="image-grid">
-              <img
-                id="city-image1"
-                src=""
-                alt="City Image 1"
-                class="custom-image"
-              />
-              <img
-                id="city-image2"
-                src=""
-                alt="City Image 2"
-                class="custom-image"
-              />
+            <div class="media-container">
+                <div class="media-title">صوت</div>
+                <audio id="city-audio" class="custom-audio" controls></audio>
             </div>
+            <div class="info-subtitle" id="city-subtitle"></div>
+            <p class="info-text" id="city-info"></p>
+            <div><h2 id="city-name1"></h2></div>
+            <p class="info1-text" id="city-info1"></p>
+            <div class="media-container">
+                <div class="media-title">قديما</div>
+                <div class="image-grid">
+                    <div class="image-item">
+                        <img
+                            id="city-image1"
+                            src=""
+                            alt="City Image 1"
+                            class="custom-image"
+                        />
+                        <div class="media-title">حديثا</div>
+                        <div class="image-item">
+                            <img
+                                id="city-image2"
+                                src=""
+                                alt="City Image 2"
+                                class="custom-image"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div class="citations" id="citation-bottom"></div>
+         
+          
           </div>
         </div>
-      </div>
     </div>
 
+
+    
+    </div>
+</div>
     <audio id="hover-sound" src="sounds/hover-sound.mp3"></audio>
     <audio id="click-sound" src="sounds/click-sound.mp3"></audio>
 
@@ -438,26 +534,51 @@
             subtitle:
               'جزيرة تقع في البحر الأحمر في أقصى جنوب غرب المملكة العربية السعودية وتتبع إداريًا منطقة جازان، تعد أكبر جُزُر المملكة، وحولها أرخبيل يعرف باسم "جزر فرسان".',
             info: "تبعد نحو 38كم عن ساحل جازان، ويُمكن الوصول إليها من خلال معبرٍ بحريٍّ عن طريق ميناءي جازان وفرسان.\n\
-      تشكَّلت جزيرة فرسان في عصر البليستوسين، أو ما يعرف بالعصر الجليدي، وقد ارتبطت فرسان منذ القدم بحضارات عديدة كانت تهتم بالناحية التجارية؛ وذلك نتيجةً لكون تلك الجزيرة محطة التقاء واستراحة للرحلات التجارية التي كانت في أغلب الأحيان موسمية الأمر الذي أدّى بهم إلى أن يستقروا في جزيرة فرسان ويقيموا حضاراتهم ويؤثرون في هذه الجزيرة.\n\
-      عندما وصل العثمانيون إلى البحر الأحمر استطاعوا جعلها بحيرة عثمانية، ومن المسلم به أنهم استطاعوا السيطرة على الجزيرة في القرن السادس عشر الميلادي في عام 1538م وذلك نتيجة لحملة سليمان باشا الخادم، لاحقًا خرجت فرسان عن الحكم العثماني بفضل تبعيتها للأدارسة بعد أن استطاع الإدريسي إخضاع هذه الجزيرة لسلطته وسلخها من السلطة العثمانية في عام 1912م.\n\
-      وأخيرًا بكون فرسان تابعة لجازان فقد تم الإشراف السعودي عليها، وقام الملك عبد العزيز بعدة إصلاحات في جزيرة فرسان، منها توليته أمير على هذه الجزيرة ثم إرسال قاضي إليها كي يقوم بعملية حل القضايا البسيطة، بعد ذلك ضُمت فرسان التي هي بدورها تابعة لمنطقة جازان إلى حكم ابن سعود فأعلن توحيد الدولة تحت مسمى المملكة العربية السعودية.\n\
-      أهم الموقع الأثرية فيها: القلعة العثمانية، منزل الرفاعي، بيت الجرمل، مسجد النجدي، قلعة لقمان، مباني غرين، وادي مطر، منطقة الكدمي، مباني العرضي.",
+                                        تشكَّلت جزيرة فرسان في عصر البليستوسين، أو ما يعرف بالعصر الجليدي، وقد ارتبطت فرسان منذ القدم بحضارات عديدة كانت تهتم بالناحية التجارية؛ وذلك نتيجةً لكون تلك الجزيرة محطة التقاء واستراحة للرحلات التجارية التي كانت في أغلب الأحيان موسمية، الأمر الذي أدّى بهم إلى أن يستقروا في جزيرة فرسان ويقيموا حضاراتهم ويؤثرون في هذه الجزيرة.\n\
+                                        عندما وصل العثمانيون إلى البحر الأحمر استطاعوا جعلها بحيرة عثمانية، ومن المسلم به أنهم استطاعوا السيطرة على الجزيرة في القرن السادس عشر الميلادي في عام 1538م، وذلك نتيجة لحملة سليمان باشا الخادم. لاحقًا خرجت فرسان عن الحكم العثماني بفضل تبعيتها للأدارسة بعد أن استطاع الإدريسي إخضاع هذه الجزيرة لسلطته وسلخها من السلطة العثمانية في عام 1912م.\n\
+                                        وأخيرًا، بكون فرسان تابعة لجازان، فقد تم الإشراف السعودي عليها، وقام الملك عبد العزيز بعدة إصلاحات في جزيرة فرسان، منها توليته أمير على هذه الجزيرة ثم إرسال قاضي إليها كي يقوم بعملية حل القضايا البسيطة. بعد ذلك ضُمت فرسان التي هي بدورها تابعة لمنطقة جازان إلى حكم ابن سعود فأعلن توحيد الدولة تحت مسمى المملكة العربية السعودية.\n\
+                                        أهم المواقع الأثرية فيها: القلعة العثمانية، منزل الرفاعي، بيت الجرمل، مسجد النجدي، قلعة لقمان، مباني غرين، وادي مطر، منطقة الكدمي، مباني العرضي.",
+            name1: "دليل سياحي",
+            info1:
+              "الأنشطة السياحية: الغوص واستكشاف الشعاب المرجانية، رحلات القوارب، زيارة المواقع الأثرية مثل قلعة لقمان وبيت الرفاعي، التنزه على شواطئ مثل شاطئ القندل وشاطئ رأس القرن •\n\
+                                        الفنادق الشهيرة: فندق فرسان بارك، منتجع فرسان السياحي •\n\
+                                        الأطعمة المشهورة: المأكولات البحرية الطازجة مثل السمك المشوي والروبيان، الأطباق المحلي •\n\
+                                        الميزانية المناسبة للسائح: 250-400 ريال سعودي في اليوم •\n\
+                                        الطقس: معتدل في الشتاء، حار ورطب في الصيف •",
+
             coords: [42.120984, 16.701895],
             image1: "/images/ph.png",
-            image2: "/images/ph1.png",
+            image2: "/images/جزيرة فرسان3.jpg",
+            citationBottom:
+              "المصدر: ويكيبيديا، <a href='https://ar.wikipedia.org/wiki/%D8%AC%D8%B2%D9%8A%D8%B1_%D9%81%D8%B1%D8%B3%D8%A7%D9%86' target='_blank'>جزيرة فرسان</a>",
+
             markerImage: "/images/loc1.png",
           },
+
           {
             name: "مدينة عثر",
             audio: "audio/مدينة عثر.mp3",
             subtitle:
               "مدينة عثر: مدينة تقع على ساحل البحر الأحمر بالقرب من قوز الجعافرة، تقع على لسان من اليابسة يمتد داخل مياه البحر الأحمر براس الطرفة، وتتبع إداريًا منطقة جازان.",
             info: "هي مدينة تاريخية اندثرت معالمها ولم يبقى منها سوى الأطلال، يرجع تاريخها إلى العصر الإسلامي المبكر واستمر استيطانها حتى القرن الثالث عشر الميلادي، بدأ تاريخ المدينة مع أسرة الزيادي التهامية، وللأسرة ارتباط تاريخي مع الخلفاء العباسيين.\n\
-        كانت عثر ميناءً غنيًا بالتجارة، حيث أصبح نقطة التقاء ما بين حضارتين، الأولى تلك السفن القادمة من بلاد الشرق كالهند والصين، والأخرى السفن القادمة من بلاد الشام ومصر بالإضافة إلى علاقته بالساحل الأفريقي. ومنذ أن أنشئ دار ملكية عباسية لضرب النقود أصبح الدينار العثري معروفًا في تهامة، وكانت إيرادات طرف السنوية تزيد عن خمسمائة ألف دينار عثري، جميع الدنانير الذهبية العثرية التي اكتشفت وتوفرت في الوقت الراهن تعود للقرن العاشر الميلادي.\n\
-        لا تتوفر معلومات تاريخية كافية تنبئ عن أسباب اندثار مدينة عثر، ولكن حسب ما يتوفر هو أن تاريخ اندثارها يتوافق مع انتقال عاصمة المخلاف السليماني من مدينة عثر إلى مدينة جازان العليا لأسباب تاريخية.",
+                                          كانت عثر ميناءً غنيًا بالتجارة، حيث أصبح نقطة التقاء ما بين حضارتين، الأولى تلك السفن القادمة من بلاد الشرق كالهند والصين، والأخرى السفن القادمة من بلاد الشام ومصر بالإضافة إلى علاقته بالساحل الأفريقي. ومنذ أن أنشئ دار ملكية عباسية لضرب النقود أصبح الدينار العثري معروفًا في تهامة، وكانت إيرادات طرف السنوية تزيد عن خمسمائة ألف دينار عثري، جميع الدنانير الذهبية العثرية التي اكتشفت وتوفرت في الوقت الراهن تعود للقرن العاشر الميلادي.\n\
+                                          لا تتوفر معلومات تاريخية كافية تنبئ عن أسباب اندثار مدينة عثر، ولكن حسب ما يتوفر هو أن تاريخ اندثارها يتوافق مع انتقال عاصمة المخلاف السليماني من مدينة عثر إلى مدينة جازان العليا لأسباب تاريخية.",
+            name1: "دليل سياحي",
+            info1:
+              "الأنشطة السياحية: الغوص واستكشاف الشعاب المرجانية، رحلات القوارب، زيارة المواقع الأثرية مثل قلعة لقمان وبيت الرفاعي، التنزه على شواطئ مثل شاطئ القندل وشاطئ رأس القرن •\n\
+                                        الفنادق الشهيرة: فندق فرسان بارك، منتجع فرسان السياحي •\n\
+                                        الأطعمة المشهورة: المأكولات البحرية الطازجة مثل السمك المشوي والروبيان، الأطباق المحلي •\n\
+                                        الميزانية المناسبة للسائح: 250-400 ريال سعودي في اليوم •\n\
+                                        الطقس: معتدل في الشتاء، حار ورطب في الصيف •",
+           
             coords: [42.442433, 17.136913],
             image1: "/images/عثر.png",
-            image2: "images/عثر١.png",
+            image2: "images/عثر3.jpg",
+            citationBottom:
+              "المصدر: ويكيبيديا، <a href='https://ar.wikipedia.org/wiki/%D8%B9%D8%AB%D8%B1' target='_blank'>مدينة عثر </a>",
+
+
+
             markerImage: "/images/loc1.png",
           },
           {
@@ -465,10 +586,21 @@
             audio: "audio/الشقيق.mp3",
             subtitle:
               "مدينة الشقيق: مدينة تقع في جنوب غرب المملكة العربية السعودية على ساحل البحر الأحمر، تتبع إداريًا منطقة جازان.",
-            info: "الشقيق هي مدينة تجارية أكثر من كونها مدينة للصيد؛ حيث كان بها مرسى حربي ثم ميناء تجاري لم يتوقف إلا عام 1982م. كان أهالي المدينة يعملون بالتجارة والرعي والتجارة والقليل منهم كانوا يعملون بالصيد، وكانت قبائل بني شجاع تقطنها وتملك فيها العديد من المكتبات العلمية، وكان لموقعها الجغرافي أهمية عند زيارة الحجاج إلى مكة بالوقوف فيها لجمالها ووفرة الماء بها",
+            info: "الشقيق هي مدينة تجارية أكثر من كونها مدينة للصيد؛ حيث كان بها مرسى حربي ثم ميناء تجاري لم يتوقف إلا عام 1982م. كان أهالي المدينة يعملون بالتجارة والرعي والتجارة والقليل منهم كانوا يعملون بالصيد، وكانت قبائل بني شجاع تقطنها وتملك فيها العديد من المكتبات العلمية، وكان لموقعها الجغرافي أهمية عند زيارة الحجاج إلى مكة بالوقوف فيها لجمالها ووفرة الماء بها.",
+            name1: "دليل سياحي",
+            info1:
+              "الأنشطة السياحية: التزلج على الرمال، ركوب الدراجات الصحراوية، التجول في الأسواق الشعبية •\n\
+                                الفنادق الشهيرة: فنادق ومنتجعات محلية توفر إقامة مريحة •\n\
+                                الأطعمة المشهورة: الأكلات البدوية التقليدية مثل الكبسة والمندي •\n\
+                                الميزانية المناسبة للسائح: 150-250 ريال سعودي في اليوم •\n\
+                                الطقس: حار وجاف في الصيف، معتدل في الشتاء •",
+
             coords: [42.028689, 17.719873],
-            image1: "images/شقيق.png",
-            image2: "images/شقيق١.png",
+            image1: "images/شقيق١.png",
+            image2: "images/الشقيق3.jpg",
+            citationBottom:
+              "المصدر: ويكيبيديا، <a href='https://ar.wikipedia.org/wiki/%D8%A7%D9%84%D8%B4%D9%82%D9%8A%D9%82_(%D8%AC%D8%A7%D8%B2%D8%A7%D9%86)' target='_blank'>مدينة الشقيق  </a>",
+
             markerImage: "/images/loc1.png",
           },
 
@@ -483,11 +615,23 @@
               "• مسجد أبي بكر الصديق: من أبرز المعالم التاريخية في محافظة البرك.\n\n" +
               "• سور البرك الأثري: بني في أوائل عام 1232م، ويتضح أنه رمم من قبل الشيخ علي بن عبده في عام 1908م. توجد على رأس الجبل قشلة، وكانت عليها مدفع لحماية البلدة قديمًا، وكانت تُستخدم كتحية لضيف مرموق، وكان آخرها إطلاق 21 طلقة من المدفع تحية لمقدم الملك سعود أثناء زيارته للبرك عام 1955م. وعند حافة هذا السور من الشمال توجد بحيرة تسمى الشراعة، وهي تعد عرقلة لمن يحاول اقتحام السور.\n\n" +
               "• الحصن الأثري: يقع الحصن عند مصب وادي ذهبان على بعد 15 كم. طرازه يشبه أسلوب بناء سور البرك، وموقعه يشرف على بساتين النخيل والمرفأ والطريق البري لمرور الحجاج والتجارة. وقد دفن الجزء الغربي منه بسبب الرمال الزاحفة.",
+            name1: "دليل سياحي",
+            info1:
+              " الأنشطة السياحية: ركوب القوارب، صيد الأسماك، الاسترخاء على الشواطئ الرملية •\n" +
+              " الفنادق الشهيرة: فنادق ومنتجعات محلية بإطلالات على البحر •\n" +
+              " الأطعمة المشهورة: المأكولات البحرية مثل الأسماك والمحار •\n" +
+              " الميزانية المناسبة للسائح: 200-300 ريال سعودي في اليوم •\n" +
+              " الطقس: حار في الصيف، معتدل في الشتاء • ",
+
             coords: [41.536266, 18.207148],
             image1: "images/برك.png",
-            image2: "images/برك١.png",
+            image2: "images/البرك3.jpg",
+            citationBottom:
+              "المصدر: ويكيبيديا، <a href='https://ar.wikipedia.org/wiki/%D9%85%D8%AD%D8%A7%D9%81%D8%B8%D8%A9_%D8%A7%D9%84%D8%A8%D8%B1%D9%83' target='_blank'>محافظة البرك   </a>",
+
             markerImage: "/images/loc1.png",
           },
+
           {
             name: "مدينة القنفذة",
             audio: "audio/القنفذة.mp3",
@@ -498,23 +642,41 @@
               "في القرن الثالث عشر، كانت المدينة منطلقًا لحملات محمد علي باشا الحربية على عسير، كما أنها كانت ميدانًا لتصادم القوى المتصارعة من العثمانيين والإيطاليين. ولا تزال هناك شواهد من السفن الحربية الغارقة في مياه البحر الأحمر جنوب القنفذة، نتيجة قصف البوارج الإيطالية.\n\n" +
               "عندما دخلت القوات السعودية مدينة جدة، انتهى حكم الأشراف في المدينة.\n\n" +
               "كان ميناء القنفذة من الموانئ المهمة على ساحل البحر الأحمر، حيث ساهم في استقبال السفن الكبيرة المحملة بحاصلات اليمن والشام، وعن طريقه تم تصدير حاصلات هذه البلاد الوفيرة إلى خارج المنطقة ومدنها المجاورة مثل جدة ومكة المكرمة. كما أن هذا الميناء كان يرتاده السفن اليونانية والرومانية للحصول على الذهب الموجود في هذه المنطقة على بعد 75 كم غرب مرسى حلي. وقد نشط ميناء القنفذة بحكم موقعه الاستراتيجي ولعب دورًا كبيرًا في إثراء الحياة التجارية والتموينية.",
+            name1: "دليل سياحي",
+            info1:
+              " الأنشطة السياحية: زيارة المواقع الأثرية، الغوص واستكشاف الشعاب المرجانية، ركوب القوارب •\n" +
+              " الفنادق الشهيرة: فنادق متنوعة تناسب جميع الميزانيات •\n" +
+              " الأطعمة المشهورة: المأكولات البحرية، الأطباق المحلية •\n" +
+              " الميزانية المناسبة للسائح: 200-400 ريال سعودي في اليوم •\n" +
+              " الطقس: معتدل في الشتاء وحار في الصيف •",
+
             coords: [41.078739, 19.12814],
             image1: "images/قتفذة.png",
-            image2: "images/قنفذة١.png",
+            image2: "images/القنفذة3.jpg",
+            citationBottom: "المصدر: ويكيبيديا، <a href='https://ar.wikipedia.org/wiki/%D8%A7%D9%84%D9%82%D9%86%D9%81%D8%B0%D8%A9' target='_blank'>مدينة القنفذة   </a>",
+
             markerImage: "/images/loc1.png",
           },
+
           {
             name: "مركز دوقة",
-            audio: "audio/دوقة.mp3",
+            audio: "audio/القنفذة.mp3",
             subtitle:
               "مركز دوقة: مركز تابع لمحافظة القنفذة يقع على ساحل البحر الأحمر غرب المملكة العربية السعودية.",
-            info:
-              "تشتهر دوقة بالزراعة وهي منطقة زراعية مهمة ذات تربة خصبة، لذا اشتغل أهلها بالزراعة. اشتهرت بزراعة الحبوب مثل الدخن والذرة، والسمسم (الجُلجلان)، بالإضافة إلى القطن في بعض نواحيها.\n\n" +
-              "ورد ذكر دوقة في المصادر القديمة، وفي تحديد موقعها جاء في معجم البلدان لياقوت الحموي: «دوقة: بأرض اليمن لغامد، وقال نصر: دوقة واد على طريق الحاج من صنعاء إذا سلكوا تهامة، بينه وبين يلملم ثلاثة أيام.»\n\n" +
-              "كما ذكرت في بعض المصادر القديمة، فمن ذلك ما ذكره الهمداني بقوله: «محجة صنعاء إلى مكة طريق تهامة ثم حلي ثم قنونا وتسمى القناة ثم دوقة وهي للعبديين من بقايا جرهم ثم إلى السَّرين ثم لمعجز ثم الخيال ثم إلى يلملم ثم ملكان ثم مكة، هذه طريق الساحل.»",
+            info: "تشتهر دوقة بالزراعة وهي منطقة زراعية مهمة خصبة التربة لذا اشتغل أهلها بالزراعة اشتهرت بزراعة الحبوب كالدخن والذرة، والسمسم (الجُلجلان) بالإضافة إلى القطن في بعض نواحيها.\n\nورد ذكر دوقة في المصادر القديمة وفي تحديد موقعها جاء في معجم البلدان لياقوت الحموي: «دوقة: بأرض اليمن لغامد، وقال نصر: دوقة واد على طريق الحاج من صنعاء إذا سلكوا تهامة، بينه وبين يلملم ثلاثة أيام.»\n\nوقد ذكرت في بعض المصادر القديمة، فمن ذلك ما ذكره الهمداني بقوله: «محجة صنعاء إلى مكة طريق تهامة ثم حلي ثم قنونا وتسمى القناة ثم دوقة وهي للعبديين من بقايا جرهم ثم إلى السَّرين ثم لمعجز ثم الخيال ثم إلى يلملم ثم ملكان ثم مكة، هذه طريق الساحل.»",
+            name1: "دليل سياحي",
+            info1:
+              " الأنشطة السياحية: التزلج على الرمال، التجول في الطبيعة، زيارة المواقع الأثرية •\n" +
+              " الفنادق الشهيرة: فنادق محلية متوسطة الفئة •\n" +
+              " الأطعمة المشهورة: الأكلات البدوية والمشويات •\n" +
+              "الميزانية المناسبة للسائح: 150-250 ريال سعودي في اليوم •\n" +
+              " الطقس: حار وجاف في الصيف، معتدل في الشتاء •",
+
             coords: [40.920814, 19.60585],
             image1: "images/دوقة.png",
-            image2: "images/دوقة١.png",
+            image2: "images/دوقة3.jpg",
+            citationBottom:"المصدر: ويكيبيديا، <a href='https://ar.wikipedia.org/wiki/%D8%AF%D9%88%D9%82%D8%A9' target='_blank'>مركز دوقة   </a>",
+
             markerImage: "/images/loc1.png",
           },
           {
@@ -526,20 +688,40 @@
               "كانت المظيلف فيما مضى استراحة تفد إليها قوافل حجاج اليمن وحجاج الهند القادمين من ميناء القنفذة لأداء مناسك الحج والعمرة. ولا زالت المدينة تحتفظ بهذه الميزة حتى بعد توقف قدوم حجاج الهند، حيث يمر المسافرون من جنوب المملكة واليمن عبر المدينة للتزود بما يلزم لإكمال مسيرة السفر.\n\n" +
               "تتميز المظيلف بحدود بحرية تزيد من أهميتها كونها منطقة زراعية، ولها سوق شعبي يعقد يوم الأحد يتم فيه التبادل التجاري بين رواد السوق من المظيلف والمناطق المجاورة، ويمتد عمر هذا السوق لأكثر من قرن ونصف.\n\n" +
               "يحد شرق المظيلف قرية من أشهر القرى الأثرية، وهي قرية عشم ذات التاريخ المجيد، والتي كانت موطنًا للذهب. كانت قرية عشم ذات علاقة بالإغريق، وأورد المؤرخ والباحث السعودي حسن الفقيه في كتابه «مخلاف عشم»، أي مملكة عشم، الكثير من المعلومات عن تاريخ ذلك الجزء الغائب من كتب التاريخ للجزيرة العربية.",
+
             coords: [41.049484, 19.539012],
             image1: "images/مظيلف.png",
-            image2: "images/مظيلف١.png",
+            image2: "images/المظيلف3.jpg",
+            citationBottom: "المصدر: ويكيبيديا، <a href='https://ar.wikipedia.org/wiki/%D8%A7%D9%84%D9%85%D8%B8%D9%8A%D9%84%D9%81' target='_blank'>مركز المظيلف   </a>",
+
             markerImage: "/images/loc1.png",
+            info1:
+              " الأنشطة السياحية: التجول في الطبيعة، زيارة المواقع التاريخية •\n" +
+              " الفنادق الشهيرة: فنادق محلية متوسطة الفئة •\n" +
+              " الأطعمة المشهورة: الأكلات البدوية والمحلية •\n" +
+              " الميزانية المناسبة للسائح: 150-250 ريال سعودي في اليوم •\n" +
+              " الطقس: حار وجاف في الصيف، معتدل في الشتاء •",
           },
+
           {
             name: "محافظة ينبع",
             audio: "audio/ينبع.mp3",
             subtitle:
               "محافظة ينبع: هي إحدى محافظات منطقة المدينة المنورة في المملكة العربية السعودية على ساحل البحر الأحمر.",
             info: "تعتبر محافظة ينبع حاضرة تضم داخل حدودها ثلاث مدن تعكس المظاهر الرئيسة للمحافظة، وهي: ينبع البحر، وينبع النخل، وينبع الصناعية. يعود تاريخها إلى نحو 2500 عام، وتضم ميناءً تاريخيًّا كان محطة رئيسة في طرق التجارة والحج القديمة. سكنها الضابط البريطاني توماس إدوارد، الملقب بـ 'لورانس العرب'، ويعد مسكنه الآن متحفًا تاريخيًا ضمن المدينة القديمة.",
+            name1: "دليل سياحي ",
+            info1:
+              " الأنشطة السياحية: الغوص، ركوب القوارب، زيارة المعالم التاريخية، التسوق •\n" +
+              " الفنادق الشهيرة: منتجعات ينبع، فندق موفنبيك ينبع •\n" +
+              " الأطعمة المشهورة: المأكولات البحرية، الأطباق السعودية التقليدية •\n" +
+              "الميزانية المناسبة للسائح: 300-500 ريال سعودي في اليوم •\n" +
+              "الطقس: حار في الصيف، معتدل في الشتاء •",
+
             coords: [38.061835, 24.089527],
             image1: "images/ينبع.png",
-            image2: "images/ينبع١.png",
+            image2: "images/ينبع3.jpg",
+            citationBottom: "المصدر: ويكيبيديا، <a href='https://ar.wikipedia.org/wiki/%D9%8A%D9%86%D8%A8%D8%B9' target='_blank'>محافظة ينبع   </a>",
+
             markerImage: "/images/loc1.png",
           },
 
@@ -549,11 +731,22 @@
             subtitle:
               "قرية المويلح: قرية سعودية تابعة لإمارة منطقة تبوك، تقع على ساحل البحر الأحمر من الشمال.",
             info: "تُعد قلعة المويلح الأثرية من أهم معالم قرية المويلح، وهي إحدى المحطات الرئيسة على طريق الحج المصري. بُنيت القلعة في عام 1560م ويعتبرها بعض المؤرخين من أكبر القلاع في السعودية ومن كبرى القلاع القائمة على طريق الحج. تحتوي القلعة على فناء ومسجد، وتحيط بالفناء من جميع الجهات وحدات أقيمت لخدمة الحجاج، بالإضافة إلى أبراج موزعة على الأركان الأربعة للقلعة. تقع قلعة المويلح التاريخية بالقرب من قرية المويلح التي نُسب الاسم إليها.",
+            name1: "دليل سياحي ",
+            info1:
+              " الأنشطة السياحية: زيارة المواقع التاريخية، التجول في الطبيعة •\n" +
+              " الفنادق الشهيرة: فنادق محلية متوسطة الفئة •\n" +
+              " الأطعمة المشهورة: الأكلات البدوية والمحلية •\n" +
+              " الميزانية المناسبة للسائح: 150-250 ريال سعودي في اليوم •\n" +
+              " الطقس: حار وجاف في الصيف، معتدل في الشتاء •",
+
             coords: [35.482079, 27.694438],
             image1: "images/المويلح.png",
-            image2: "images/المويلح١.png",
+            image2: "images/المويلح3.jpg",
+             citationBottom:"المصدر: ويكيبيديا، <a href='https://ar.wikipedia.org/wiki/%D8%A7%D9%84%D9%85%D9%88%D9%8A%D9%84%D8%AD_(%D8%A7%D9%84%D8%B3%D8%B9%D9%88%D8%AF%D9%8A%D8%A9)' target='_blank'>قرية المويلح   </a>" ,
+
             markerImage: "/images/loc1.png",
           },
+
           {
             name: "مدينة مقنا",
             audio: "audio/مقنا.mp3",
@@ -562,11 +755,22 @@
             info:
               "تتركز معظم الآثار التي تُؤرخ لموقع مقنا في الجزء الشرقي منها، وهي مجموعة آثار تقع على هضبة مرتفعة تطل على خليج العقبة. تشمل الآثار عين ماء قديمة تُعرف بعين مقنا، بالإضافة إلى آثار قديمة في كهوف الجبال المحيطة بالواحة.\n\n" +
               "ما زال الموقع يحافظ على إنتاجه التاريخي من الثروات الطبيعية، إذ يوفر معدن الجبس والانهيدرايت (كبريتات الكالسيوم اللامائية) المستخدم في العديد من الصناعات بكميات تجارية. يُقدّر حجم الاحتياطيات في الموقع بنحو 33.6 مليون طن.",
+            name1: "دليل سياحي ",
+            info1:
+              " الأنشطة السياحية: الغوص، ركوب القوارب، صيد الأسماك •\n" +
+              " الفنادق الشهيرة: فنادق ومنتجعات محلية •\n" +
+              " الأطعمة المشهورة: المأكولات البحرية •\n" +
+              " الميزانية المناسبة للسائح: 200-300 ريال سعودي في اليوم •\n" +
+              " الطقس: حار في الصيف، معتدل في الشتاء •",
+
             coords: [39.615439, 24.450724],
             image1: "images/مقنا.png",
-            image2: "images/مقنا١.png",
+            image2: "images/مقنا3.jpg",
+            citationBottom: "المصدر: ويكيبيديا، <a href='https://ar.wikipedia.org/wiki/%D9%85%D9%82%D9%86%D8%A7' target='_blank'>مدينة مقنا   </a>",
+
             markerImage: "/images/loc1.png",
           },
+
           {
             name: "مدينة ضباء",
             audio: "audio/ضباء.mp3",
@@ -575,11 +779,22 @@
             info:
               "كانت ضباء إحدى أهم محطات رحلة الحج المصرية لما توفره من أمان ووفرة في الماء العذب. وقد ذكرها العديد من أصحاب رحلات الحج على الطريق المصري، وكان آخرهم الشيخ عبد الغني النابلسي عندما مر بها سنة 1205 هجري.\n\n" +
               "في عهد الملك المؤسس عبد العزيز بن عبد الرحمن آل سعود، بُنيت في ضباء قلعة الملك عبد العزيز عام 1933م لتكون مقرًّا للحكم في المنطقة. وفي عام 1994م، افتُتح فيها ميناء ضباء على البحر الأحمر، وهو أقرب الموانئ السعودية إلى قناة السويس وموانئ دول حوض البحر المتوسط.",
+            name1: "دليل سياحي ",
+            info1:
+              "الأنشطة السياحية: الغوص، ركوب القوارب، الاسترخاء على الشواطئ الرملية •\n" +
+              " الفنادق الشهيرة: فنادق محلية توفر إقامة مريحة •\n" +
+              "الأطعمة المشهورة: المأكولات البحرية •\n" +
+              " الميزانية المناسبة للسائح: 200-300 ريال سعودي في اليوم •\n" +
+              " الطقس: حار في الصيف، معتدل في الشتاء •",
+
             coords: [35.724307, 27.345747],
             image1: "images/ضباء.png",
-            image2: "images/ضباء١.png",
+            image2: "images/ضبا3.jpg",
+            citationBottom: "المصدر: ويكيبيديا، <a href='https://ar.wikipedia.org/wiki/%D8%B6%D8%A8%D8%A7%D8%A1' target='_blank'>مدينة ضباء   </a>",
+
             markerImage: "/images/loc1.png",
           },
+
           {
             name: "محافظة رابغ",
             audio: "audio/رابغ.mp3",
@@ -588,9 +803,19 @@
             info:
               "تضم محافظة رابغ عددًا من المصانع والشركات الكبرى، مثل مصفاة شركة أرامكو السعودية، وشركة بترورابغ للبتروكيماويات التابعة لأرامكو، والشركة السعودية للأسمنت، ومصنع الزامل للصناعات الحديدية الثقيلة، ومحطة رابغ للكهرباء، وغيرها من الشركات الصناعية.\n\n" +
               "تتمتع رابغ بتاريخ إسلامي قديم، حيث كانت إحدى محطات طريق الهجرة النبوية من مكة المكرمة إلى المدينة المنورة. شهدت أيضًا بعض الأحداث التاريخية مثل غزوة ودان وغزوة بني المصطلق. ومن أهم معالمها الأثرية قصر علياء الأثري أو حصن الجحفة.",
+            name1: "دليل سياحي ",
+            info1:
+              " الأنشطة السياحية: الغوص، ركوب القوارب، زيارة المعالم التاريخية •\n" +
+              " الفنادق الشهيرة: فنادق ومنتجعات متنوعة •\n" +
+              " الأطعمة المشهورة: المأكولات البحرية •\n" +
+              " الميزانية المناسبة للسائح: 200-400 ريال سعودي في اليوم •\n" +
+              " الطقس: معتدل في الشتاء وحار في الصيف •",
+
             coords: [39.033163, 22.799326],
             image1: "images/رابغ.png",
-            image2: "images/رابغ١.png",
+            image2: "images/رابغ3.jpg",
+             citationBottom:"المصدر: ويكيبيديا، <a href='https://ar.wikipedia.org/wiki/%D9%85%D8%AD%D8%A7%D9%81%D8%B8%D8%A9_%D8%B1%D8%A7%D8%A8%D8%BA' target='_blank'>محافظة رابغ   </a>",
+
             markerImage: "/images/loc1.png",
           },
 
@@ -603,11 +828,22 @@
               "سُمِّيت قرية ذهبان بهذا الاسم لوجود مواد ثمينة فيها، مثل الذهب والملح، التي كانت ذات قيمة تساوي قيمة الذهب لندرتها في الماضي. وقد اشتهرت ذهبان بصيد السمك لسنوات طويلة.\n\n" +
               "تعود تاريخ القرية إلى العصر الجاهلي، حيث كانت مركزًا تجاريًا وثقافيًا مهمًا بفضل موقعها الجغرافي على طريق التجارة بين مكة المكرمة والإسكندرية. وقد سكن فيها الصحابي أبو عبيدة بن الجراح.\n\n" +
               "في العصر الحديث، أصبحت ذهبان مدينة ساحلية، حيث تنتشر فيها العديد من المنتجعات السياحية والشواطئ الجميلة.",
+            name1: "دليل سياحي ",
+            info1:
+              " الأنشطة السياحية: الغوص، صيد الأسماك، الاسترخاء على الشواطئ •\n" +
+              " الفنادق الشهيرة: منتجعات وفنادق محلية •\n" +
+              "الأطعمة المشهورة: المأكولات البحرية •\n" +
+              " الميزانية المناسبة للسائح: 200-300 ريال سعودي في اليوم •\n" +
+              " الطقس: حار في الصيف، معتدل في الشتاء •",
+
             coords: [39.12115, 21.923955],
             image1: "images/ذهبان.png",
-            image2: "images/ذهبان١.png",
+            image2: "images/ذهبان3.jpg",
+            citationBottom: "المصدر: ويكيبيديا، <a href='https://ar.wikipedia.org/wiki/%D8%B0%D9%87%D8%A8%D8%A7%D9%86' target='_blank'>قرية ذهبان   </a>",
+
             markerImage: "/images/loc1.png",
           },
+
           {
             name: "مدينة جدة",
             audio: "audio/جدة.mp3",
@@ -617,12 +853,33 @@
               "تعود نشأة مدينة جدة إلى ما يقارب 3000 سنة، حيث يقال إن جدة سُميت بهذا الاسم نسبةً لجدة بن جرم بن ربان بن حلوان بن عمران بن الحاف بن قضاعة، أحد العرب قبل الإسلام. تحول تاريخ المدينة بشكل كبير في عهد الخليفة الراشدي عثمان بن عفان سنة 647 م، عندما أمر بتحويلها إلى ميناء لاستقبال حجاج البحر المتجهين لأداء الحج في مكة المكرمة. وما زالت جدة حتى اليوم المعبرَ الرئيسَ لحجاج البحر والجوّ والكثير من حجاج البر.\n\n" +
               "قبل الإسلام: نشأت جدة في الألفية الأولى قبل الميلاد على يد مجموعة من الصيادين الذين استقروا بها واتخذوها نقطة انطلاق في رحلات الصيد. وقد عُثر في وادي بريمان ووادي بويب وفي أماكن أخرى على العديد من الآثار والنقوش، بما في ذلك نقش ثمودي لرجل يُدعى «ساكت» يطلب من الإله أن يشفي زوجته «جامع» التي أصيبت بالحمى.\n\n" +
               "في العهد الإسلامي: يقول المؤرخ محمد صادق دياب إن جدة ظلّت طوال عهد الدولة الأموية والدولة العباسية تحت حكم حاكم مكة، وكانت مرفأ مكة وخزانتها. وقد شهدت جدة خلال العهدين الأموي والعباسي الكثير من الأحداث الهامة. استمرت المدينة تحت نفوذ الدول الإسلامية المتعاقبة، بدءًا بالأمويين والعباسيين، ثم الأيوبيين، فالمماليك، ثم الدولة العثمانية.\n\n" +
-              "في العهد السعودي: تعد جدة في العصر الحالي من أهم المدن السعودية، وتعتبر البوابة التجارية للمملكة، مما أكسبها أهمية كبيرة في حركة التجارة الدولية. كانت جدة تمثل المنفذ الخارجي للمملكة منذ القدم، ونتيجة لذلك شهدت نهضة صناعية وتطورًا كبيرًا في جميع المجالات التجارية والخدمية، مما جعلها من أكثر المدن استقطابًا للأعمال وصارت مركزًا هامًا للمال والأعمال.",
+              "في العهد السعودي: تعد جدة في العصر الحالي من أهم المدن السعودية، وتعتبر البوابة التجارية للمملكة، مما أكسبها أهمية كبيرة في حركة التجارة الدولية. كانت جدة تمثل المنفذ الخارجي للمملكة منذ القدم، ونتيجة لذلك شهدت نهضة صناعية وتطورًا كبيرًا في جميع المجالات التجارية والخدمية، مما جعلها من أكثر المدن استقطابًا للأعمال وصارت مركزًا هامًا للمال والأعمال.\n\n" +
+              'أحيطت جدة بسور لحمايتها منذ القرن العاشر الهجري (السادس عشر الميلادي) حتى منتصف القرن الرابع عشر الهجري (العشرين الميلادي)، وعُرِفَ بـ"سور جدة". يقع السور في منطقة جدة التاريخية وبُني بأمر من قانصوه الغوري آخر سلاطين المماليك البرجية في مصر في عام ٩١٧هـ، فكانت سبع أبواب رئيسية بنيت في أوقات متفرقة وحتى العهد السعودي الذي أضاف بوابة ثامنة لتتسع لدخول السيارات.\n\n' +
+              "سُميت هذه الأبواب بـ:\n" +
+              "  باب مكة •\n" +
+              " باب شريف •\n" +
+              " باب النافعة •\n" +
+              " باب الصبة •\n" +
+              " باب المغاربة •\n" +
+              " باب صريف •\n" +
+              " باب المدينة •\n" +
+              " باب جديد •",
+            name1: "دليل سياحي ",
+            info1:
+              "  • الأنشطة السياحية  : زيارة الكورنيش، التسوق في الأسواق والمولات، زيارة المعالم التاريخية مثل البلد القديمة \n" +
+              " الفنادق الشهيرة: فندق قصر البحر الأحمر، فندق الريتز كارلتون •\n" +
+              " الأطعمة المشهورة: الأطباق السعودية التقليدية، المأكولات البحرية •\n" +
+              " الميزانية المناسبة للسائح: 300-600 ريال سعودي في اليوم •\n" +
+              " الطقس: حار ورطب في الصيف، معتدل في الشتاء •",
+
             coords: [39.161086, 21.529155],
             image1: "images/جدة.png",
-            image2: "images/جدة١.png",
+            image2: "images/جدة3.jpg",
+            citationBottom:"المصدر: ويكيبيديا، <a href='https://ar.wikipedia.org/wiki/%D8%AC%D8%AF%D8%A9' target='_blank'>مدينة جدة    </a>" ,
+
             markerImage: "/images/loc1.png",
           },
+
           {
             name: "محافظة أملج",
             audio: "audio/املج.mp3",
@@ -631,11 +888,22 @@
             info:
               "تُعد محافظة أملج من المواقع المستهدفة لتكون وجهة سياحية عالمية ومنطقة استثمارات بارزة في المملكة، حيث تضم أرخبيلًا مكونًا من 103 جزر بكر على ساحل البحر الأحمر.\n\n" +
               "تعود جذور أملج إلى العهد الروماني، حيث كانت تُعرف باسم «لوكي لوما»، وهو ما يعني «المدينة ذات اللون الأبيض»، وذلك قبل قرابة 3000 سنة. في العصور القديمة، كانت تُطلق عليها أيضًا «الحوراء»، واحتلت المرتبة الثانية من حيث أهمية مراكز التجارة في المملكة بعد مكة المكرمة.",
+            name1: "دليل سياحي ",
+            info1:
+              " الأنشطة السياحية: الغوص، ركوب القوارب، الاسترخاء على الشواطئ الرملية •\n" +
+              " الفنادق الشهيرة: منتجعات وفنادق محلية •\n" +
+              " الأطعمة المشهورة: المأكولات البحرية •\n" +
+              " الميزانية المناسبة للسائح: 200-400 ريال سعودي في اليوم •\n" +
+              " الطقس: حار في الصيف، معتدل في الشتاء •",
+
             coords: [37.265108, 25.050006],
             image1: "images/املج.png",
-            image2: "images/املج١.png",
+            image2: "images/املج3.jpg",
+            citationBottom:"المصدر: ويكيبيديا، <a href='https://ar.wikipedia.org/wiki/%D8%A3%D9%85%D9%84%D8%AC_(%D8%AA%D8%A8%D9%88%D9%83)' target='_blank'>محافظة املج   </a>",
+
             markerImage: "/images/loc1.png",
           },
+
           {
             name: "محافظة الوجه",
             audio: "audio/الوجه.mp3",
@@ -644,11 +912,23 @@
             info:
               "تُعتبر محافظة الوجه من المستوطنات القديمة التي أسسها الأنباط، حيث كانت مركزًا تجاريًا هامًا، عُرف بميناء الوجه التاريخي والذي كان يُعرف قديمًا بميناء الحِجر نسبةً إلى عاصمة الأنباط.\n\n" +
               "استمر نشاط هذا الميناء حتى أواخر التسعينات الميلادية. تحتفظ محافظة الوجه في بعض أجزائها بالنمط العمراني التقليدي لبلداتها القديمة، بما في ذلك القرى الساحلية غير المأهولة. تُعد هذه المناطق من أبرز المعالم السياحية في المحافظة، إلى جانب القلاع والقصور الأثرية مثل قلعة السوق وقلعة الزريب.",
+            name1: "دليل سياحي ",
+            info1:
+              " الأنشطة السياحية: الغوص، ركوب القوارب، زيارة المعالم التاريخية •\n" +
+              " الفنادق الشهيرة: فنادق محلية توفر إقامة مريحة •\n" +
+              " الأطعمة المشهورة: المأكولات البحرية •\n" +
+              "الميزانية المناسبة للسائح: 200-300 ريال سعودي في اليوم •\n" +
+              " الطقس: حار في الصيف، معتدل في الشتاء •",
+
             coords: [36.468896, 26.236606],
             image1: "images/الوجه.png",
-            image2: "images/الوجه١.png",
+            image2: "images/الوجه3.jpg",
+            citationBottom:"المصدر: ويكيبيديا، <a href='https://ar.wikipedia.org/wiki/%D8%A7%D9%84%D9%88%D8%AC%D9%87' target='_blank'>محافظة الوجه   </a>",
+
+
             markerImage: "/images/loc1.png",
           },
+
           {
             name: "مدينة العلا",
             audio: "audio/العلا.mp3",
@@ -659,11 +939,22 @@
               "كانت تُسمى قديمًا دادان، ويروى أن سبب تسميتها بالعلا يعود إلى وجود عينين مشهورتين بالماء العذب، هما عين المعلق وتدعل. وقد كانت هناك نخلات شاهقات على منبع عين المعلق تُسمى العلي.\n\n" +
               "العلا من المواقع الأثرية المسجلة ضمن قائمة التراث العالمي لمنظمة اليونسكو، وقد كانت عاصمة الأنباط الثانية في العصور القديمة. تحتوي المدينة على آثار تعود إلى ما يزيد عن 300 سنة قبل الميلاد، ومرت بها رحلات تاريخية بارزة، مثل رحلات ابن بطوطة وعبد القادر الجزيري، بالإضافة إلى مستكشفين غربيين مثل الرحالة الإنجليزي ج. كوك الذي أعد دراسة عن العلا بعنوان (الكتابات السامية الشمالية).\n\n" +
               "تضم العلا أيضًا آثارًا إسلامية تعود إلى السنة السابعة للهجرة، بما في ذلك قلعة موسى بن نصير التي أقامها في أعلى جبل وسط المدينة، وكذلك آثار سكة حديد حجاج الشام.",
+            name1: "دليل سياحي ",
+            info1:
+              "الأنشطة السياحية: زيارة المواقع الأثرية مثل مدائن صالح، التجول في الطبيعة، ركوب الجمال •\n" +
+              " الفنادق الشهيرة: منتجعات وفنادق فاخرة مثل منتجع حافة العالم •\n" +
+              " الأطعمة المشهورة: الأكلات السعودية التقليدية •\n" +
+              " الميزانية المناسبة للسائح: 300-500 ريال سعودي في اليوم •\n" +
+              " الطقس: معتدل في الشتاء وحار في الصيف •",
+
             coords: [37.929482, 26.603139],
             image1: "images/العلا.png",
-            image2: "images/العلا١.png",
+            image2: "images/العلا3.jpg",
+            citationBottom: "المصدر: ويكيبيديا، <a href='https://ar.wikipedia.org/wiki/%D8%A7%D9%84%D8%B9%D9%84%D8%A7' target='_blank'>مدينة العلا   </a>",
+
             markerImage: "/images/loc1.png",
           },
+
           {
             name: "محافظة البدع",
             audio: "audio/البدع.mp3",
@@ -673,9 +964,18 @@
               "محافظة البدع هي موقع تاريخي بارز تقع في شمال غرب المملكة العربية السعودية ضمن منطقة تبوك. كانت في العصور القديمة موطنًا لقوم مدين الذين ذُكروا في القرآن الكريم، وكانت واحة تقع في وسط وادي عِفال. تعكس آثارها جوانب الحياة الدينية والاجتماعية والاقتصادية في المنطقة خلال فترات ما قبل الميلاد والفترة الإسلامية المبكرة.\n\n" +
               "تُعرف محافظة البدع اليوم بالنطاق الجغرافي الواقع على الجزء الساحلي من منطقة تبوك، الذي يطل على خليج العقبة والبحر الأحمر. في العصور الإسلامية، كانت البدع محطة رئيسة على طريق الحج المصري الذي كان يربط أهل مصر بالأماكن المقدسة في مكة المكرمة والمدينة المنورة.\n\n" +
               "تشمل الدلائل الأثرية في المنطقة مغاير شعيب، وموقع المالحة، والملقطة، وبئر السعيدني. بجانب موقع المالحة، على الضفاف الشرقية من وادي عِفال، توجد تلال أثرية تعرف بالملقطة، والتي تعود آثارها إلى الفترة الإسلامية الممتدة بين القرنين السابع والحادي عشر الميلاديين. تشمل هذه الآثار سورًا مبنيًّا من اللبن، وبركة مبنية من الحجر، وأجزاء من الزجاج والفخار العائد إلى الفترة الإسلامية.",
+            name1: "دليل سياحي ",
+            info1:
+              " الأنشطة السياحية: زيارة المواقع الأثرية، التجول في الطبيعة •\n" +
+              " الفنادق الشهيرة: فنادق محلية متوسطة الفئة •\n" +
+              " الأطعمة المشهورة: الأكلات البدوية والمحلية •\n" +
+              " الميزانية المناسبة للسائح: 150-250 ريال سعودي في اليوم •\n" +
+              " الطقس: حار وجاف في الصيف، معتدل في الشتاء •",
             coords: [35.007319, 28.508513],
             image1: "images/البدع.png",
-            image2: "images/البدع١.png",
+            image2: "images/البدع3.jpg",
+            citationBottom:"المصدر: ويكيبيديا، <a href='https://ar.wikipedia.org/wiki/%D9%85%D8%AD%D8%A7%D9%81%D8%B8%D8%A9_%D8%A7%D9%84%D8%A8%D8%AF%D8%B9' target='_blank'>محافظة البدع   </a>",
+
             markerImage: "/images/loc1.png",
           },
         ];
@@ -731,12 +1031,15 @@
             document.getElementById("city-name").innerText = city.name;
             document.getElementById("city-subtitle").innerText = city.subtitle;
             document.getElementById("city-info").innerText = city.info;
+            document.getElementById("city-name1").innerText = city.name1;
+            document.getElementById("city-info1").innerText = city.info1;
             document.getElementById("city-image1").src = city.image1;
             document.getElementById("city-image2").src = city.image2;
             document.getElementById("city-audio").src = city.audio;
             document.getElementById("info-panel").classList.add("visible");
-
+            document.getElementById('citation-bottom').innerHTML = city.citationBottom;
             document.getElementById("map").classList.add("zoomed");
+
           });
         });
 
@@ -752,16 +1055,7 @@
         .getElementById("back-to-map")
         .addEventListener("click", function () {
           document.getElementById("info-panel").classList.remove("visible");
-
           document.getElementById("map").classList.remove("zoomed");
-
-          map.flyTo({
-            center: [42.49, 24.774],
-            zoom: 5,
-            pitch: 60,
-            bearing: -17.6,
-            essential: true,
-          });
         });
     </script>
     <a href="/index.html" class="start-button">
